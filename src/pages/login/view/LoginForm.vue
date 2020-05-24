@@ -80,7 +80,7 @@ export default {
     login: function() {
       console.log(this);
       this.axios
-        .post("/dianyeAutho/servlet/login", {
+        .post("/servlet/login", {
           userName: "admin",
           password: "admin"
         })

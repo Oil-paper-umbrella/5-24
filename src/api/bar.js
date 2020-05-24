@@ -6,7 +6,7 @@ import axios from '../control/filter/http.js'
  */
 let getBarChart =  function (body) {
   return new Promise((resolve, reject)=>{
-    axios.post('/dianye/rest/JsonData/barChart', body)
+    axios.post('/rest/JsonData/barChart', body)
         .then(data=>{
           if(data.status===200){
             //处理状态

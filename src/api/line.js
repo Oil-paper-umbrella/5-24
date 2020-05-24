@@ -5,7 +5,7 @@ import axios from '../control/filter/http.js'
  */
 let getLineChart = async function (body) {
   return new Promise((resolve, reject) => {
-    axios.post('/dianye/rest/JsonData/LineChart', body)
+    axios.post('/rest/JsonData/LineChart', body)
       .then(data => {
         if (data.status === 200) {
           //处理状态

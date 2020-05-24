@@ -76,7 +76,7 @@ export default {
       },
       flag: false,
       allIndexs: [],
-      checkedVal: [8] // 选中的 指标参数 和 季度参数
+      checkedVal: [] // 选中的 指标参数 和 季度参数
     };
   },
   mounted() {
@@ -86,32 +86,20 @@ export default {
     } else if (nowPath == "/whole") {
       this.flag = true;
     }
-    /**
-     * APi请求队列
-     * */
-    let getApi = [
-      requestCommonData.getAllIndexs(),
-      this.getLineInfo(),
-    ];
-    /**
-     * 响应数据处理队列
-     * */
-    let resApi = [this.requestAllIndexs, this.requestLineChartData];
-    //请求组件所需要数据
-    this.reqGetInfo(getApi, resApi);
+    this.getLineInfo()
   },
   methods: {
     async getLineInfo(){
       let indexData = await requestCommonData.getAllIndexs();
-      this.checkedVal[0] = indexData.data.Allindexs[1].iid;
-      let lineData = await getLineChart({ indexid: indexData.data.Allindexs[1].iid})
-      return lineData;
+      this.requestAllIndexs(indexData.data);
+      this.checkedVal = [indexData.data.Allindexs[1].iid];
     },
     reqGetInfo(getApi, resApi) {
       /**
        * 异步请求数据
        * */
       let result = Promise.all(getApi);
+      console.log("line",result);
       result
         .then(data => {
           for (let i = 0; i < data.length; i++) {

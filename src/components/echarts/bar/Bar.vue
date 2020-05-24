@@ -1,5 +1,5 @@
 <template>
-  <div class="bar-chart" v-bind:style="{height:clientHeight}">
+  <div class="bar-chart" v-bind:style="{ height: clientHeight }">
     <!-- 排序下拉菜单 -->
     <div class="bar-sort-menu">
       <el-dropdown trigger="click">
@@ -11,22 +11,30 @@
           <el-dropdown-item
             @click.native="sort()"
             style="padding:0;width:75px;text-align:center;"
-          >默认</el-dropdown-item>
+            >默认</el-dropdown-item
+          >
           <el-dropdown-item
             @click.native="sort('>')"
             style="padding:0;width:75px;text-align:center;"
-          >从高到低</el-dropdown-item>
+            >从高到低</el-dropdown-item
+          >
           <el-dropdown-item
             @click.native="sort('<')"
             style="padding:0;width:75px;text-align:center;"
-          >从低到高</el-dropdown-item>
+            >从低到高</el-dropdown-item
+          >
         </el-dropdown-menu>
       </el-dropdown>
     </div>
     <!-- 指标级联框 -->
     <div class="index-menu">
       <span class="menu-name">指标：</span>
-      <el-cascader v-model="checkedVal" :options="indicator" size="small" filterable></el-cascader>
+      <el-cascader
+        v-model="checkedVal"
+        :options="indicator"
+        size="small"
+        filterable
+      ></el-cascader>
     </div>
     <!-- 渲染柱形图容器 -->
     <div id="bar-container"></div>
@@ -59,7 +67,7 @@ export default {
         otherCityScore: [], // 其他十七个城市得分
         pdCityScore: [], // 平顶山市得分
         weight: "bold",
-        size: 15
+        size: 15,
       },
       storeData: null,
       flag: false, // 用于切换 字体样式
@@ -67,7 +75,7 @@ export default {
         {
           value: 1,
           label: "指标",
-          children: null
+          children: null,
         },
         {
           value: 2,
@@ -79,17 +87,17 @@ export default {
               children: [
                 {
                   value: "13",
-                  label: "期初值"
+                  label: "期初值",
                 },
                 {
                   value: "14",
-                  label: "1803"
+                  label: "1803",
                 },
                 {
                   value: "15",
-                  label: "1903"
-                }
-              ]
+                  label: "1903",
+                },
+              ],
             },
             {
               value: "2",
@@ -97,17 +105,17 @@ export default {
               children: [
                 {
                   value: "13",
-                  label: "期初值"
+                  label: "期初值",
                 },
                 {
                   value: "14",
-                  label: "1803"
+                  label: "1803",
                 },
                 {
                   value: "15",
-                  label: "1903"
-                }
-              ]
+                  label: "1903",
+                },
+              ],
             },
             {
               value: "3",
@@ -115,24 +123,24 @@ export default {
               children: [
                 {
                   value: "13",
-                  label: "期初值"
+                  label: "期初值",
                 },
                 {
                   value: "14",
-                  label: "1803"
+                  label: "1803",
                 },
                 {
                   value: "15",
-                  label: "1903"
-                }
-              ]
-            }
-          ]
-        }
+                  label: "1903",
+                },
+              ],
+            },
+          ],
+        },
       ],
       allIndexs: [],
       allTimes: [],
-      checkedVal: [] // 选中的 指标参数 和 季度参数
+      checkedVal: [], // 选中的 指标参数 和 季度参数
     };
   },
   mounted() {
@@ -143,40 +151,20 @@ export default {
     } else if (nowPath == "/whole") {
       this.flag = true;
     }
-    /**
-     * APi请求队列
-     * */
-    let getApi = [
-      requestCommonData.getAllTimes(),
-      requestCommonData.getAllIndexs(),
-      this.getBarInfo()
-    ];
-    /**
-     * 响应数据处理队列
-     * */
-    let resApi = [
-      this.resuestAllTimes,
-      this.resuestAllIndexs,
-      this.resuestBarChartData
-    ];
-    //请求组件所需要数据
-    this.reqGetInfo(getApi, resApi);
+    this.getBarInfo();
   },
   methods: {
     // 请求所有季度跟指标,默认初始渲染第一个季度跟第一个指标
     async getBarInfo() {
       let timeData = await requestCommonData.getAllTimes();
       let indexData = await requestCommonData.getAllIndexs();
+      this.resuestAllTimes(timeData.data);
+      this.resuestAllIndexs(indexData.data);
       this.checkedVal = [
         1,
         indexData.data.Allindexs[3].iid,
-        timeData.data.Alltime[0].tid
+        timeData.data.Alltime[1].tid,
       ];
-      let barData = await getBarChart({
-        timeid: timeData.data.Alltime[0].tid,
-        indexid: indexData.data.Allindexs[3].iid
-      });
-      return barData;
     },
     // 请求所有指标
     resuestAllIndexs(data) {
@@ -206,7 +194,7 @@ export default {
       // 异步请求数据
       let result = Promise.all(getApi);
       result
-        .then(data => {
+        .then((data) => {
           for (let i = 0; i < data.length; i++) {
             if (data[i].code === 0) {
               resApi[i](data[i].data);
@@ -215,7 +203,7 @@ export default {
             }
           }
         })
-        .catch(error => {
+        .catch((error) => {
           throw error;
         });
     },
@@ -284,7 +272,7 @@ export default {
           this.barDataObj.pdCityScore,
           this.barDataObj.overAvg,
           this.barDataObj.belowAvg
-        )
+        ),
       });
     },
     setClient() {
@@ -292,7 +280,7 @@ export default {
         ? document.documentElement.clientHeight
         : document.body.clientHeight;
       this.clientHeight = clientHeight - 125 + "px";
-    }
+    },
   },
   watch: {
     barDataObj: {
@@ -300,16 +288,16 @@ export default {
         this.barDataObj = val;
         this.barCharts(this.storeData);
       },
-      deep: true
+      deep: true,
     },
     checkedVal: {
       handler: function(val) {
         let getApi = [getBarChart({ timeid: val[2], indexid: val[1] })];
         let resApi = [this.resuestBarChartData];
         this.reqGetInfo(getApi, resApi);
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 

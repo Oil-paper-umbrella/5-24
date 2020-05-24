@@ -5,7 +5,7 @@ import axios from '../control/filter/http.js'
  */
 let getFourModules = async function (body) {
   return new Promise((resolve, reject) => {
-    axios.post('/dianye/rest/JsonData/FourModual', body)
+    axios.post('/rest/JsonData/FourModual', body)
       .then(data => {
         if (data.status === 200) {
           //处理状态
